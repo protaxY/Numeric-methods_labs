@@ -241,22 +241,36 @@ u_c21 = solver.solve('combined', '2_points_1st_order')
 u_c32 = solver.solve('combined', '3_points_2nd_order')
 u_c22 = solver.solve('combined', '2_points_2nd_order')
 
+def true_u_func(x, t, a, b, c):
+    return np.exp((c-a)*t)*np.sin(x+b*t)
+
+true_u = np.zeros((solver.time_steps, solver.n))
+for i in range(solver.time_steps):
+    for j in range(solver.n):
+        true_u[i, j] = true_u_func(left_border+j*solver.h, i*solver.tau, a, b, c)
+
 # Create the figure and the line that we will manipulate
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(1, 3)
 
 x = [left_border+solver.h*i for i in range(0, n)]
 
-line_u_y21, = ax.plot(x, u_e21[0])
-line_u_y42, = ax.plot(x, u_e32[0])
-line_u_y22, = ax.plot(x, u_e22[0])
+line_u_y21, = ax[0].plot(x, u_e21[0], label="explicit 2_points_1st_order")
+line_u_y32, = ax[0].plot(x, u_e32[0], label="explicit 3_points_2nd_order")
+line_u_y22, = ax[0].plot(x, u_e22[0], label="explicit 2_points_2nd_order")
+line_true_u1, = ax[0].plot(x, true_u[0], label="true")
+ax[0].legend()
 
-line_u_i21, = ax.plot(x, u_i21[0])
-line_u_i42, = ax.plot(x, u_i32[0])
-line_u_i22, = ax.plot(x, u_i22[0])
+line_u_i21, = ax[1].plot(x, u_i21[0], label="implicit 2_points_1st_order")
+line_u_i32, = ax[1].plot(x, u_i32[0], label="implicit 3_points_2nd_order")
+line_u_i22, = ax[1].plot(x, u_i22[0], label="implicit 2_points_2nd_order")
+line_true_u2, = ax[1].plot(x, true_u[0], label="true")
+ax[1].legend()
 
-line_u_c21, = ax.plot(x, u_c21[0])
-line_u_c42, = ax.plot(x, u_c32[0])
-line_u_c22, = ax.plot(x, u_c22[0])
+line_u_c21, = ax[2].plot(x, u_c21[0], label="combined 2_points_1st_order")
+line_u_c32, = ax[2].plot(x, u_c32[0], label="combined 3_points_2nd_order")
+line_u_c22, = ax[2].plot(x, u_c22[0], label="combined 2_points_2nd_order")
+line_true_u3, = ax[2].plot(x, true_u[0], label="true")
+ax[2].legend()
 
 # adjust the main plot to make room for the sliders
 fig.subplots_adjust(left=0.1, bottom=0.25)
@@ -274,16 +288,19 @@ time_slider = Slider(
 # The function to be called anytime a slider's value changes
 def update(val):
     line_u_y21.set_ydata(u_e21[int(time_slider.val)])
-    line_u_y42.set_ydata(u_e32[int(time_slider.val)])
+    line_u_y32.set_ydata(u_e32[int(time_slider.val)])
     line_u_y22.set_ydata(u_e22[int(time_slider.val)])
+    line_true_u1.set_ydata(true_u[int(time_slider.val)])
 
     line_u_i21.set_ydata(u_i21[int(time_slider.val)])
-    line_u_i42.set_ydata(u_i32[int(time_slider.val)])
+    line_u_i32.set_ydata(u_i32[int(time_slider.val)])
     line_u_i22.set_ydata(u_i22[int(time_slider.val)])
+    line_true_u2.set_ydata(true_u[int(time_slider.val)])
 
     line_u_c21.set_ydata(u_c21[int(time_slider.val)])
-    line_u_c42.set_ydata(u_c32[int(time_slider.val)])
+    line_u_c32.set_ydata(u_c32[int(time_slider.val)])
     line_u_c22.set_ydata(u_c22[int(time_slider.val)])
+    line_true_u3.set_ydata(true_u[int(time_slider.val)])
 
     fig.canvas.draw_idle()
 
