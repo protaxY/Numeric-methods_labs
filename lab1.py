@@ -250,27 +250,55 @@ for i in range(solver.time_steps):
         true_u[i, j] = true_u_func(left_border+j*solver.h, i*solver.tau, a, b, c)
 
 # Create the figure and the line that we will manipulate
-fig, ax = plt.subplots(1, 3)
+fig, ax = plt.subplots(2, 3)
 
 x = [left_border+solver.h*i for i in range(0, n)]
 
-line_u_y21, = ax[0].plot(x, u_e21[0], label="explicit 2_points_1st_order")
-line_u_y32, = ax[0].plot(x, u_e32[0], label="explicit 3_points_2nd_order")
-line_u_y22, = ax[0].plot(x, u_e22[0], label="explicit 2_points_2nd_order")
-line_true_u1, = ax[0].plot(x, true_u[0], label="true")
-ax[0].legend()
+line_u_y21, = ax[0, 0].plot(x, u_e21[0], label="explicit 2_points_1st_order")
+line_u_y32, = ax[0, 0].plot(x, u_e32[0], label="explicit 3_points_2nd_order")
+line_u_y22, = ax[0, 0].plot(x, u_e22[0], label="explicit 2_points_2nd_order")
+line_true_u1, = ax[0, 0].plot(x, true_u[0], label="true")
+ax[0, 0].legend()
 
-line_u_i21, = ax[1].plot(x, u_i21[0], label="implicit 2_points_1st_order")
-line_u_i32, = ax[1].plot(x, u_i32[0], label="implicit 3_points_2nd_order")
-line_u_i22, = ax[1].plot(x, u_i22[0], label="implicit 2_points_2nd_order")
-line_true_u2, = ax[1].plot(x, true_u[0], label="true")
-ax[1].legend()
+line_u_i21, = ax[0, 1].plot(x, u_i21[0], label="implicit 2_points_1st_order")
+line_u_i32, = ax[0, 1].plot(x, u_i32[0], label="implicit 3_points_2nd_order")
+line_u_i22, = ax[0, 1].plot(x, u_i22[0], label="implicit 2_points_2nd_order")
+line_true_u2, = ax[0, 1].plot(x, true_u[0], label="true")
+ax[0, 1].legend()
 
-line_u_c21, = ax[2].plot(x, u_c21[0], label="combined 2_points_1st_order")
-line_u_c32, = ax[2].plot(x, u_c32[0], label="combined 3_points_2nd_order")
-line_u_c22, = ax[2].plot(x, u_c22[0], label="combined 2_points_2nd_order")
-line_true_u3, = ax[2].plot(x, true_u[0], label="true")
-ax[2].legend()
+line_u_c21, = ax[0, 2].plot(x, u_c21[0], label="combined 2_points_1st_order")
+line_u_c32, = ax[0, 2].plot(x, u_c32[0], label="combined 3_points_2nd_order")
+line_u_c22, = ax[0, 2].plot(x, u_c22[0], label="combined 2_points_2nd_order")
+line_true_u3, = ax[0, 2].plot(x, true_u[0], label="true")
+ax[0, 2].legend()
+
+timeline = [i for i in range(solver.time_steps)]
+error_u_e21 = np.max(abs(u_e21-true_u), axis = 1)
+error_u_e32 = np.max(abs(u_e32-true_u), axis = 1)
+error_u_e22 = np.max(abs(u_e22-true_u), axis = 1)
+
+error_u_i21 = np.max(abs(u_i21-true_u), axis = 1)
+error_u_i32 = np.max(abs(u_i32-true_u), axis = 1)
+error_u_i22 = np.max(abs(u_i22-true_u), axis = 1)
+
+error_u_c21 = np.max(abs(u_c21-true_u), axis = 1)
+error_u_c32 = np.max(abs(u_c32-true_u), axis = 1)
+error_u_c22 = np.max(abs(u_c22-true_u), axis = 1)
+
+ax[1, 0].plot(timeline, error_u_e21, label="explicit 2_points_1st_order")
+ax[1, 0].plot(timeline, error_u_e32, label="explicit 3_points_2nd_order")
+ax[1, 0].plot(timeline, error_u_e22, label="explicit 2_points_2nd_order")
+ax[1, 0].legend()
+
+ax[1, 1].plot(timeline, error_u_i21, label="explicit 2_points_1st_order")
+ax[1, 1].plot(timeline, error_u_i32, label="explicit 3_points_2nd_order")
+ax[1, 1].plot(timeline, error_u_i22, label="explicit 2_points_2nd_order")
+ax[1, 1].legend()
+
+ax[1, 2].plot(timeline, error_u_c21, label="explicit 2_points_1st_order")
+ax[1, 2].plot(timeline, error_u_c32, label="explicit 3_points_2nd_order")
+ax[1, 2].plot(timeline, error_u_c22, label="explicit 2_points_2nd_order")
+ax[1, 2].legend()
 
 # adjust the main plot to make room for the sliders
 fig.subplots_adjust(left=0.1, bottom=0.25)
