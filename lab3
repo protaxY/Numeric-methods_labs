@@ -1,0 +1,32 @@
+
+
+class Solver:
+    def __init__(self, a, b, c, d, f, u_start, dt_u_start, left_border_condition, right_border_condition, top_border_condition, bottom_border_condition, left_border, right_border, top_border, bottom_border, n, sigma, end_time) -> None:
+        self.a = a
+        self.b = b
+        self.c = c
+        self.d = d
+        self.f = f
+        self.u_start = u_start
+        self.dt_u_start = dt_u_start
+        self.left_border = left_border
+        self.right_border = right_border
+        self.l = right_border-left_border
+
+        self.n = n
+        self.sigma = sigma
+        self.end_time = end_time
+        self.h = self.l/(n-1)
+        self.time_steps = int((end_time*a**2*n)/(sigma*self.l))-1
+        self.tau = (sigma*self.l)/(a**2*n)
+
+        self.left_border_condition = left_border_condition
+        self.right_border_condition = right_border_condition
+
+        self.left_a = 1
+        self.left_b = 1
+        self.right_a = 1
+        self.right_b = 1
+
+    def solve(self, method, boundary_conditions_interpolation):
+

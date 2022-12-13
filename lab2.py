@@ -202,14 +202,14 @@ error_u_i21 = np.max(abs(u_i21-true_u), axis = 1)
 error_u_i32 = np.max(abs(u_i32-true_u), axis = 1)
 error_u_i22 = np.max(abs(u_i22-true_u), axis = 1)
 
-ax[1, 0].plot(timeline, error_u_e21, label="explicit 2_points_1st_order")
-ax[1, 0].plot(timeline, error_u_e32, label="explicit 3_points_2nd_order")
-ax[1, 0].plot(timeline, error_u_e22, label="explicit 2_points_2nd_order")
+ax[1, 0].plot(timeline, error_u_e21, label="explicit 2_points_1st_order error")
+ax[1, 0].plot(timeline, error_u_e32, label="explicit 3_points_2nd_order error")
+ax[1, 0].plot(timeline, error_u_e22, label="explicit 2_points_2nd_order error")
 ax[1, 0].legend()
 
-ax[1, 1].plot(timeline, error_u_i21, label="explicit 2_points_1st_order")
-ax[1, 1].plot(timeline, error_u_i32, label="explicit 3_points_2nd_order")
-ax[1, 1].plot(timeline, error_u_i22, label="explicit 2_points_2nd_order")
+ax[1, 1].plot(timeline, error_u_i21, label="implicit 2_points_1st_order error")
+ax[1, 1].plot(timeline, error_u_i32, label="implicit 3_points_2nd_order error")
+ax[1, 1].plot(timeline, error_u_i22, label="implicit 2_points_2nd_order error")
 ax[1, 1].legend()
 
 
